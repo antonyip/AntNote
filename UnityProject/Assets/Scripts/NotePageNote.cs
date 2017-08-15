@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class NotePageNote : MonoBehaviour {
 
+    public int ID;
 	// Use this for initialization
 	void Start () {
 		
@@ -13,4 +14,9 @@ public class NotePageNote : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void Clicked()
+    {
+
+    }
 }

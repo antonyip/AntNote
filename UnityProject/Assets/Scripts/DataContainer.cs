@@ -19,12 +19,20 @@ public class DataContainer : MonoBehaviour {
 		if (instance == null)
         {
             instance = this;
+            HACKEDSTART();
         }
         else
         {
             Debug.Log("Double Init");
         }
 	}
+
+    private void HACKEDSTART()
+    {
+        DataNote dn = new DataNote();
+        dn.Title = "FirstNote!";
+        notes.Add(dn);
+    }
 	
     public List<DataNote> GetNotes()
     {
@@ -37,4 +45,11 @@ public class DataContainer : MonoBehaviour {
         dn.Title = title;
         notes.Add(dn);
     }
+
+    public void SaveNotesToDB()
+    {
+       
+    }
+
+
 }

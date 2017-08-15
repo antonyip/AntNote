@@ -4,6 +4,18 @@ using UnityEngine;
 
 public class MenuManager : MonoBehaviour {
 
+    public static MenuManager instance;
+    
+    public static MenuManager GetInstance()
+    {
+        return instance;
+    }
+
+    void Awake()
+    {
+        instance = this;
+    }
+
     public GameObject MainMenu;
     public GameObject NoteMenu;
 
@@ -19,4 +31,10 @@ public class MenuManager : MonoBehaviour {
 	void OnDisable () {
 		
 	}
+
+    public static void GoToNote(int id)
+    {
+        instance.MainMenu.SetActive(false);
+        instance.NoteMenu.SetActive(true);
+    }
 }
