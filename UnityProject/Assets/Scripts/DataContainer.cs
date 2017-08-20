@@ -6,7 +6,7 @@ public class DataContainer : MonoBehaviour {
 
     private static DataContainer instance;
 
-    private List<DataNote> notes = new List<DataNote>();
+    public List<DataNote> notes = new List<DataNote>();
 
     public static DataContainer GetInstance()
     {
@@ -19,7 +19,7 @@ public class DataContainer : MonoBehaviour {
 		if (instance == null)
         {
             instance = this;
-            HACKEDSTART();
+            LoadNotesFromDB();
         }
         else
         {
@@ -44,11 +44,33 @@ public class DataContainer : MonoBehaviour {
         DataNote dn = new DataNote();
         dn.Title = title;
         notes.Add(dn);
+        SaveNotesToDB();
     }
 
     public void SaveNotesToDB()
     {
-       
+        JSONObject json = new JSONObject();
+ 
+        foreach (var item in notes)
+        {
+            json.Add(item.Encode());
+        }
+
+        PlayerPrefs.SetString("notes", json.Print());
+    }
+
+    public void LoadNotesFromDB()
+    {
+        JSONObject json = new JSONObject(PlayerPrefs.GetString("notes", "{}"));
+        Debug.Log(json.Print(true));
+
+        notes.Clear();
+        foreach (var item in json.list)
+        {
+            DataNote dn = new DataNote();
+            dn.Decode(item);
+            notes.Add(dn);
+        }
     }
 
 

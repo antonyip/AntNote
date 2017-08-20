@@ -18,5 +18,6 @@ public class MainPageButton : MonoBehaviour {
     public void Clicked()
     {
         MainPageManager.MainButtonClicked(ID);
+
     }
 }
