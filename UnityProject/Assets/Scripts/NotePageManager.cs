@@ -63,6 +63,8 @@ public class NotePageManager : MonoBehaviour
     // Use this for initialization
     void OnEnable()
     {
+        noteBodyIDsAppearing.Clear();
+
         for (int i = 0; i < ContentHolder.childCount; i++)
         {
             ContentHolder.GetChild(i).gameObject.SetActive(false);
