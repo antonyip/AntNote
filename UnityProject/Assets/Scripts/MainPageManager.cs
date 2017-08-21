@@ -10,6 +10,7 @@ public class MainPageManager : MonoBehaviour {
     public GameObject mainMenuNotePrefab;
     public GameObject ListOfNotesHolder;
     public Text AddNoteTitle;
+    public List<long> noteIDsAppearing = new List<long>();
 
     public static MainPageManager GetInstance()
     {
@@ -41,6 +42,7 @@ public class MainPageManager : MonoBehaviour {
         //add back
         var notes = DataContainer.GetInstance().GetNotes();
         int counter = 0;
+        noteIDsAppearing.Clear();
         foreach (var item in notes)
         {
             var go = Instantiate(mainMenuNotePrefab) as GameObject;
@@ -48,6 +50,7 @@ public class MainPageManager : MonoBehaviour {
             go.transform.localScale = Vector3.one;
             go.GetComponent<MainPageButton>().ID = counter++;
             go.GetComponent<MainPageButton>().Load(item);
+            noteIDsAppearing.Add(item.ID);
         }
 	}
 	

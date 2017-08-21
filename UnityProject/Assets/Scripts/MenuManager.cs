@@ -24,8 +24,6 @@ public class MenuManager : MonoBehaviour {
     {
         MainMenu.SetActive(true);
         NoteMenu.SetActive(false);
-
-        var Notes = DataContainer.GetInstance().GetNotes();
     }
 	
 	// Update is called once per frame
@@ -35,7 +33,9 @@ public class MenuManager : MonoBehaviour {
 
     public static void GoToNote(int id)
     {
+        long NoteSelected = instance.MainMenu.GetComponent<MainPageManager>().noteIDsAppearing[id];
         instance.MainMenu.SetActive(false);
         instance.NoteMenu.SetActive(true);
+        instance.NoteMenu.GetComponent<NotePageManager>().LoadScreen(NoteSelected);
     }
 }
