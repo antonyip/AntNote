@@ -23,6 +23,7 @@ public class MenuManager : MonoBehaviour {
 	void OnEnable ()
     {
         MainMenu.SetActive(true);
+        NoteMenu.SetActive(false);
 
         var Notes = DataContainer.GetInstance().GetNotes();
     }

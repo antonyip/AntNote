@@ -1,10 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainPageButton : MonoBehaviour {
 
     public int ID;
+
+    public Text Title;
 	// Use this for initialization
 	void Start () {
 		
@@ -19,5 +23,10 @@ public class MainPageButton : MonoBehaviour {
     {
         MainPageManager.MainButtonClicked(ID);
 
+    }
+
+    public void Load(DataNote item)
+    {
+        Title.text = item.Title;
     }
 }

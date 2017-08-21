@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainPageManager : MonoBehaviour {
 
@@ -8,6 +9,7 @@ public class MainPageManager : MonoBehaviour {
 
     public GameObject mainMenuNotePrefab;
     public GameObject ListOfNotesHolder;
+    public Text AddNoteTitle;
 
     public static MainPageManager GetInstance()
     {
@@ -45,6 +47,7 @@ public class MainPageManager : MonoBehaviour {
             go.transform.SetParent(ListOfNotesHolder.transform);
             go.transform.localScale = Vector3.one;
             go.GetComponent<MainPageButton>().ID = counter++;
+            go.GetComponent<MainPageButton>().Load(item);
         }
 	}
 	
@@ -55,7 +58,7 @@ public class MainPageManager : MonoBehaviour {
 
     public void AddNote()
     {
-        DataContainer.GetInstance().AddNote("MainPageManager.cs Note");
+        DataContainer.GetInstance().AddNote(AddNoteTitle.text);
         OnEnable();
     }
 

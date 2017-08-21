@@ -62,7 +62,6 @@ public class DataContainer : MonoBehaviour {
     public void LoadNotesFromDB()
     {
         JSONObject json = new JSONObject(PlayerPrefs.GetString("notes", "{}"));
-        Debug.Log(json.Print(true));
 
         notes.Clear();
         foreach (var item in json.list)
