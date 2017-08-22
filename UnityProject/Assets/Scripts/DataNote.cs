@@ -5,6 +5,7 @@ using UnityEngine;
 public class DataNoteBody
 {
     public long ID;
+    public long NumOfLines = 1;
     public string BodyText = "";
     public bool Done = false;
 
@@ -15,6 +16,7 @@ public class DataNoteBody
         json.AddField("BodyText", BodyText);
         json.AddField("Done", Done);
         json.AddField("ID", ID);
+        json.AddField("NumOfLines", NumOfLines);
         return json;
     }
 
@@ -22,11 +24,8 @@ public class DataNoteBody
     {
         BodyText = json.GetField("BodyText").str;
         Done = json.GetField("Done").b;
-
-        if (json.HasField("ID"))
-            ID = json.GetField("ID").i;
-        else
-            ID = 0;
+        ID = json.GetField("ID").i;
+        NumOfLines = json.GetField("NumOfLines").i;
     }
 }
 

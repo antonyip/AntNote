@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class NotePageManager : MonoBehaviour
 {
     private static NotePageManager instance;
-
+    private static bool ReadyToUpdate = false;
     public GameObject NotePrefab;
     public Transform ContentHolder;
     long NoteSelected = -1;
@@ -25,12 +25,27 @@ public class NotePageManager : MonoBehaviour
 
     public static void UpdateNote(int NoteID, string text)
     {
-        if (NoteID == 0) return;
+        if (ReadyToUpdate == false) return; // weird hack to stop UI updating
+
+        if (NoteID == 0) return; // edit mode cannot be 0. can only call update note in edit mode.
+
+        if (instance.EditMode == false) return;
 
         Debug.Log("UpdateNote: " + NoteID + " (" + text + ")");
+
         var CurrentNote = DataContainer.GetInstance().notes.Find(x => x.ID == instance.NoteSelected);
-        var BodyEdit = CurrentNote.Body.Find(x => x.ID == NoteID);
+        var idOfNote = instance.noteBodyIDsAppearing[NoteID];
+        var BodyEdit = CurrentNote.Body.Find(x => x.ID == idOfNote);
+
         BodyEdit.BodyText = text;
+
+
+        var lineCount = text.Split('\n');
+        BodyEdit.NumOfLines = lineCount.Length;
+
+
+        Debug.Log("noLine: " + lineCount.Length);
+
         DataContainer.GetInstance().SaveNotesToDB();
         DataContainer.GetInstance().LoadNotesFromDB();
     }
@@ -50,17 +65,12 @@ public class NotePageManager : MonoBehaviour
         {
             var NoteID = instance.noteBodyIDsAppearing[buttonID];
             var CurrentNote = DataContainer.GetInstance().notes.Find(x => x.ID == instance.NoteSelected);
-            var BodyToBeToggled = CurrentNote.Body.Find(x => x.ID == NoteID);
-            foreach (var item in CurrentNote.Body)
-            {
-                Debug.Log(item.ID.ToString());
-            }
-            Debug.Log("nid" + NoteID);
-            
+            var BodyToBeToggled = CurrentNote.Body.Find(x => x.ID == NoteID);            
             BodyToBeToggled.Done = BodyToBeToggled.Done ? false : true;
-
         }
 
+        DataContainer.GetInstance().SaveNotesToDB();
+        DataContainer.GetInstance().LoadNotesFromDB();
         instance.OnEnable();
     }
 
@@ -68,15 +78,17 @@ public class NotePageManager : MonoBehaviour
     {
         var CurrentNote = DataContainer.GetInstance().notes.Find(x => x.ID == instance.NoteSelected);
         DataNoteBody dnb = new DataNoteBody();
-        dnb.ID = CurrentNote.Body.Count + 1;
+        dnb.ID = CurrentNote.Body.Count;
         CurrentNote.Body.Add(dnb);
         DataContainer.GetInstance().SaveNotesToDB();
         DataContainer.GetInstance().LoadNotesFromDB();
+        OnEnable();
     }
 
     // Use this for initialization
     void OnEnable()
     {
+        Debug.Log("OE");
         noteBodyIDsAppearing.Clear();
 
         for (int i = 0; i < ContentHolder.childCount; i++)
@@ -89,16 +101,17 @@ public class NotePageManager : MonoBehaviour
             var CurrentNote = DataContainer.GetInstance().notes.Find(x => x.ID == NoteSelected);
 
             var counter = 0;
-            if (EditMode)
+            if (EditMode == true)
             {
                 var go = Instantiate(NotePrefab) as GameObject;
                 go.transform.SetParent(ContentHolder);
                 go.transform.localScale = Vector3.one;
                 go.GetComponent<NotePageNote>().ID = counter++;
                 go.GetComponent<NotePageNote>().AddNoteButton();
-                noteBodyIDsAppearing.Add(-1);
                 go.GetComponent<NotePageNote>().Body.interactable = false;
                 go.GetComponent<NotePageNote>().Body.GetComponent<Image>().raycastTarget = false;
+
+                noteBodyIDsAppearing.Add(-1);
             }
 
             foreach (var item in CurrentNote.Body)
@@ -121,9 +134,20 @@ public class NotePageManager : MonoBehaviour
                     go.GetComponent<NotePageNote>().Body.GetComponent<Image>().raycastTarget = false;
                 }
             }
+
+            foreach (var item in noteBodyIDsAppearing)
+            {
+                Debug.Log("l:" + item);
+            }
+
             var height = counter * 150 + (counter - 1) * 10;
             ContentHolder.GetComponent<RectTransform>().sizeDelta = new Vector2(640, height);
             //ContentHolder.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+
+            if (EditMode)
+            {
+                ReadyToUpdate = true;
+            }
         }
     }
 
@@ -146,6 +170,8 @@ public class NotePageManager : MonoBehaviour
             EditMode = false;
         else
             EditMode = true;
+
+        ReadyToUpdate = false;
 
         OnEnable();
     }

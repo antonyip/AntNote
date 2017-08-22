@@ -1954,6 +1954,36 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 224819533693768282, guid: 3a902845fc12b8d449aad9adc6a9253b,
+        type: 2}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224819533693768282, guid: 3a902845fc12b8d449aad9adc6a9253b,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224819533693768282, guid: 3a902845fc12b8d449aad9adc6a9253b,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224819533693768282, guid: 3a902845fc12b8d449aad9adc6a9253b,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224819533693768282, guid: 3a902845fc12b8d449aad9adc6a9253b,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 224819533693768282, guid: 3a902845fc12b8d449aad9adc6a9253b,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: -85
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3a902845fc12b8d449aad9adc6a9253b, type: 2}
   m_IsPrefabParent: 0
@@ -3297,7 +3327,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1372805986}
   m_Direction: 2
   m_Value: 1
-  m_Size: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
