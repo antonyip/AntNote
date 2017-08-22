@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class NotePageNote : MonoBehaviour {
 
     public int ID;
-    public Text Body;
+    public InputField Body;
+    public Text BodyDesign;
 
     public void Clicked()
     {

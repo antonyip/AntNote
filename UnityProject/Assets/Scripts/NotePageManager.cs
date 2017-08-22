@@ -95,24 +95,27 @@ public class NotePageManager : MonoBehaviour
 
                 if (item.Done == true)
                 {
-                    go.GetComponent<NotePageNote>().Body.fontStyle = FontStyle.Italic;
-                    go.GetComponent<NotePageNote>().Body.color = Color.gray;
+                    go.GetComponent<NotePageNote>().BodyDesign.fontStyle = FontStyle.Italic;
+                    go.GetComponent<NotePageNote>().BodyDesign.color = Color.gray;
                 }
                 else
                 {
-                    go.GetComponent<NotePageNote>().Body.fontStyle = FontStyle.Normal;
-                    go.GetComponent<NotePageNote>().Body.color = Color.black;
+                    go.GetComponent<NotePageNote>().BodyDesign.fontStyle = FontStyle.Normal;
+                    go.GetComponent<NotePageNote>().BodyDesign.color = Color.black;
                 }
 
                 if (EditMode)
                 {
-
+                    go.GetComponent<NotePageNote>().Body.interactable = true;
                 }
                 else // not edit mode
                 {
-
+                    go.GetComponent<NotePageNote>().Body.interactable = false;
                 }
             }
+            var height = counter * 150 + (counter - 1) * 10;
+            ContentHolder.GetComponent<RectTransform>().sizeDelta = new Vector2(640, height);
+            //ContentHolder.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
         }
     }
 
