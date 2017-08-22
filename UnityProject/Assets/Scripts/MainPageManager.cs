@@ -68,5 +68,6 @@ public class MainPageManager : MonoBehaviour {
     public static void MainButtonClicked(int id)
     {
         MenuManager.GoToNote(id);
+        Debug.Log(id);
     }
 }

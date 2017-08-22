@@ -28,5 +28,6 @@ public class MainPageButton : MonoBehaviour {
     public void Load(DataNote item)
     {
         Title.text = item.Title;
+        GetComponent<Button>().colors = DataContainer.GetInstance().colorBlock[item.Color];
     }
 }

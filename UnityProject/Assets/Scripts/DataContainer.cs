@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DataContainer : MonoBehaviour {
 
     private static DataContainer instance;
+
+    public ColorBlock[] colorBlock;
 
     public List<DataNote> notes = new List<DataNote>();
 
@@ -43,6 +46,7 @@ public class DataContainer : MonoBehaviour {
     {
         DataNote dn = new DataNote();
         dn.Title = title;
+        dn.ID = notes.Count;
         notes.Add(dn);
         SaveNotesToDB();
     }

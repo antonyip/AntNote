@@ -23,6 +23,13 @@ public class NotePageManager : MonoBehaviour
         }
     }
 
+    public void SetColor(int colorID)
+    {
+        var CurrentNote = DataContainer.GetInstance().notes.Find(x => x.ID == instance.NoteSelected);
+        CurrentNote.Color = colorID;
+        OnEnable();
+    }
+
     public static void UpdateNote(int NoteID, string text)
     {
         if (ReadyToUpdate == false) return; // weird hack to stop UI updating
@@ -80,15 +87,12 @@ public class NotePageManager : MonoBehaviour
         DataNoteBody dnb = new DataNoteBody();
         dnb.ID = CurrentNote.Body.Count;
         CurrentNote.Body.Add(dnb);
-        DataContainer.GetInstance().SaveNotesToDB();
-        DataContainer.GetInstance().LoadNotesFromDB();
-        OnEnable();
+        ReadyToUpdate = false;
     }
 
     // Use this for initialization
     void OnEnable()
     {
-        Debug.Log("OE");
         noteBodyIDsAppearing.Clear();
 
         for (int i = 0; i < ContentHolder.childCount; i++)
@@ -101,6 +105,8 @@ public class NotePageManager : MonoBehaviour
             var CurrentNote = DataContainer.GetInstance().notes.Find(x => x.ID == NoteSelected);
 
             var counter = 0;
+
+            float TotalHeight = 0;
             if (EditMode == true)
             {
                 var go = Instantiate(NotePrefab) as GameObject;
@@ -110,7 +116,8 @@ public class NotePageManager : MonoBehaviour
                 go.GetComponent<NotePageNote>().AddNoteButton();
                 go.GetComponent<NotePageNote>().Body.interactable = false;
                 go.GetComponent<NotePageNote>().Body.GetComponent<Image>().raycastTarget = false;
-
+                go.GetComponent<NotePageNote>().GetComponent<Button>().colors = DataContainer.GetInstance().colorBlock[CurrentNote.Color];
+                TotalHeight += 160;
                 noteBodyIDsAppearing.Add(-1);
             }
 
@@ -121,6 +128,7 @@ public class NotePageManager : MonoBehaviour
                 go.transform.localScale = Vector3.one;
                 go.GetComponent<NotePageNote>().ID = counter++;
                 go.GetComponent<NotePageNote>().LoadNote(item);
+                go.GetComponent<NotePageNote>().GetComponent<Button>().colors = DataContainer.GetInstance().colorBlock[CurrentNote.Color];
                 noteBodyIDsAppearing.Add(item.ID);
 
                 if (EditMode)
@@ -133,15 +141,11 @@ public class NotePageManager : MonoBehaviour
                     go.GetComponent<NotePageNote>().Body.interactable = false;
                     go.GetComponent<NotePageNote>().Body.GetComponent<Image>().raycastTarget = false;
                 }
+
+                TotalHeight += go.GetComponent<RectTransform>().sizeDelta.y + 10;
             }
 
-            foreach (var item in noteBodyIDsAppearing)
-            {
-                Debug.Log("l:" + item);
-            }
-
-            var height = counter * 150 + (counter - 1) * 10;
-            ContentHolder.GetComponent<RectTransform>().sizeDelta = new Vector2(640, height);
+            ContentHolder.GetComponent<RectTransform>().sizeDelta = new Vector2(640, TotalHeight);
             //ContentHolder.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
 
             if (EditMode)
@@ -161,6 +165,7 @@ public class NotePageManager : MonoBehaviour
     internal void LoadScreen(long noteSelected)
     {
         NoteSelected = noteSelected;
+        ReadyToUpdate = false;
         OnEnable();
     }
 
