@@ -19,4 +19,26 @@ public class NotePageNote : MonoBehaviour {
     {
         Body.text = "Add New Note";
     }
+
+    internal void LoadNote(DataNoteBody item)
+    {
+        //Body.text = "NOTE:" + item.BodyText;
+        Body.text = item.BodyText;
+
+        if (item.Done == true)
+        {
+            BodyDesign.fontStyle = FontStyle.Italic;
+            BodyDesign.color = Color.gray;
+        }
+        else
+        {
+            BodyDesign.fontStyle = FontStyle.Normal;
+            BodyDesign.color = Color.black;
+        }
+    }
+
+    public void TextUpdate()
+    {
+        NotePageManager.UpdateNote(ID, Body.text);
+    }
 }

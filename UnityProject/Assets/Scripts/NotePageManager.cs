@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NotePageManager : MonoBehaviour
 {
@@ -20,6 +21,18 @@ public class NotePageManager : MonoBehaviour
         {
             instance = this;
         }
+    }
+
+    public static void UpdateNote(int NoteID, string text)
+    {
+        if (NoteID == 0) return;
+
+        Debug.Log("UpdateNote: " + NoteID + " (" + text + ")");
+        var CurrentNote = DataContainer.GetInstance().notes.Find(x => x.ID == instance.NoteSelected);
+        var BodyEdit = CurrentNote.Body.Find(x => x.ID == NoteID);
+        BodyEdit.BodyText = text;
+        DataContainer.GetInstance().SaveNotesToDB();
+        DataContainer.GetInstance().LoadNotesFromDB();
     }
 
     internal static void ButtonClicked(int buttonID)
@@ -55,9 +68,10 @@ public class NotePageManager : MonoBehaviour
     {
         var CurrentNote = DataContainer.GetInstance().notes.Find(x => x.ID == instance.NoteSelected);
         DataNoteBody dnb = new DataNoteBody();
-        dnb.ID = CurrentNote.Body.Count;
+        dnb.ID = CurrentNote.Body.Count + 1;
         CurrentNote.Body.Add(dnb);
         DataContainer.GetInstance().SaveNotesToDB();
+        DataContainer.GetInstance().LoadNotesFromDB();
     }
 
     // Use this for initialization
@@ -83,6 +97,8 @@ public class NotePageManager : MonoBehaviour
                 go.GetComponent<NotePageNote>().ID = counter++;
                 go.GetComponent<NotePageNote>().AddNoteButton();
                 noteBodyIDsAppearing.Add(-1);
+                go.GetComponent<NotePageNote>().Body.interactable = false;
+                go.GetComponent<NotePageNote>().Body.GetComponent<Image>().raycastTarget = false;
             }
 
             foreach (var item in CurrentNote.Body)
@@ -91,26 +107,18 @@ public class NotePageManager : MonoBehaviour
                 go.transform.SetParent(ContentHolder);
                 go.transform.localScale = Vector3.one;
                 go.GetComponent<NotePageNote>().ID = counter++;
+                go.GetComponent<NotePageNote>().LoadNote(item);
                 noteBodyIDsAppearing.Add(item.ID);
-
-                if (item.Done == true)
-                {
-                    go.GetComponent<NotePageNote>().BodyDesign.fontStyle = FontStyle.Italic;
-                    go.GetComponent<NotePageNote>().BodyDesign.color = Color.gray;
-                }
-                else
-                {
-                    go.GetComponent<NotePageNote>().BodyDesign.fontStyle = FontStyle.Normal;
-                    go.GetComponent<NotePageNote>().BodyDesign.color = Color.black;
-                }
 
                 if (EditMode)
                 {
                     go.GetComponent<NotePageNote>().Body.interactable = true;
+                    go.GetComponent<NotePageNote>().Body.GetComponent<Image>().raycastTarget = true;
                 }
                 else // not edit mode
                 {
                     go.GetComponent<NotePageNote>().Body.interactable = false;
+                    go.GetComponent<NotePageNote>().Body.GetComponent<Image>().raycastTarget = false;
                 }
             }
             var height = counter * 150 + (counter - 1) * 10;
