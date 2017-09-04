@@ -19,6 +19,10 @@ public class OptionColor : MonoBehaviour {
             GetComponent<Button>().colors = DataContainer.GetInstance().colorBlock[4];
         if (name.Contains("5"))
             GetComponent<Button>().colors = DataContainer.GetInstance().colorBlock[5];
+        if (name.Contains("6"))
+            GetComponent<Button>().colors = DataContainer.GetInstance().colorBlock[6];
+        if (name.Contains("7"))
+            GetComponent<Button>().colors = DataContainer.GetInstance().colorBlock[7];
     }
 	
 	// Update is called once per frame
